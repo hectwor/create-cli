@@ -33,7 +33,7 @@ function parseArgumentsIntoOptions(rawArgs) {
 async function promptForMissingOptions(options) {
   const defaultTemplate = "TypeScript";
   const defaultName = "template-name";
-  const defaultCloud = "aws";
+  const defaultCloud = "AWS";
   if (options.skipPrompts) {
     return {
       ...options,
@@ -69,7 +69,7 @@ async function promptForMissingOptions(options) {
       type: "list",
       name: "cloud",
       message: "Please choose which cloud template to use",
-      choices: ["aws", "azure"],
+      choices: ["AWS", "AZURE"],
       default: defaultCloud,
     });
   }

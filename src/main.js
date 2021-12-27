@@ -6,6 +6,7 @@ import execa from "execa";
 import Listr from "listr";
 import { projectInstall } from "pkg-install";
 import chalk from 'chalk';
+import templates from './templates';
 
 const access = promisify(fs.access);
 const copy = promisify(ncp);
@@ -15,6 +16,19 @@ async function copyTemplateFiles(options) {
     clobber: false,
   });
 }
+
+const downloadFiles = async (options) => {
+  await execa("mkdir", [options.name], {
+    localDir: options.targetDirectory,
+  });
+  const result = await execa("git", ["clone", templates[`${options.cloud.toLowerCase()}-${options.template.toLowerCase()}`], "."], {
+    cwd: options.targetDirectory,
+  });
+  if (result.failed) {
+    return Promise.reject(new Error("Failed to clone template"));
+  }
+  return;
+};
 
 async function initGit(options) {
   const result = await execa("git", ["init"], {
@@ -49,8 +63,8 @@ export async function createProject(options) {
 
   const tasks = new Listr([
     {
-      title: "Copy project files",
-      task: () => copyTemplateFiles(options),
+      title: "Download template files",
+      task: () => downloadFiles(options),
     },
     {
       title: "Initialize git",
