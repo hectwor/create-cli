@@ -29,7 +29,7 @@ async function initGit(options) {
 export async function createProject(options) {
   options = {
     ...options,
-    targetDirectory: options.targetDirectory || process.cwd(),
+    targetDirectory: `${process.cwd()}/${options.name}`,
   };
 
   const currentFileUrl = import.meta.url;
