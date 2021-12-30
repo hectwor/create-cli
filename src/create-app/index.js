@@ -6,7 +6,8 @@ import execa from "execa";
 import Listr from "listr";
 import { projectInstall } from "pkg-install";
 import chalk from 'chalk';
-import templates from './templates';
+import templates from '../templates';
+import { parseArgumentsIntoOptions, promptForMissingOptions } from "./options";
 
 const access = promisify(fs.access);
 const copy = promisify(ncp);
@@ -27,10 +28,13 @@ const downloadFiles = async (options) => {
   if (result.failed) {
     return Promise.reject(new Error("Failed to clone template"));
   }
+  await execa("rm", ["-rf", ".git"], {
+    cwd: options.targetDirectory,
+  });
   return;
 };
 
-async function initGit(options) {
+const initGit = async (options) => {
   const result = await execa("git", ["init"], {
     cwd: options.targetDirectory,
   });
@@ -40,12 +44,14 @@ async function initGit(options) {
   return;
 }
 
-export async function createProject(options) {
+export default async (args) => {
+  let options = parseArgumentsIntoOptions(args);
+  options = await promptForMissingOptions(options);
   options = {
     ...options,
     targetDirectory: `${process.cwd()}/${options.name}`,
   };
-
+/*
   const currentFileUrl = import.meta.url;
   const templateDir = path.resolve(
     new URL(currentFileUrl).pathname,
@@ -59,7 +65,7 @@ export async function createProject(options) {
   } catch (err) {
     console.error("%s Invalid template name", chalk.red.bold('ERROR'));
     process.exit(1);
-  }
+  }*/
 
   const tasks = new Listr([
     {

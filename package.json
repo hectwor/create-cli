@@ -1,11 +1,11 @@
 {
-  "name": "@hectordahv/create-cli",
+  "name": "@hectordahv/clifun",
   "version": "1.0.0",
   "description": "A test CLI",
   "main": "src/index.js",
   "bin": {
-    "@hectordahv/create-cli": "bin/create-cli",
-    "create-cli": "bin/create-cli"
+    "@hectordahv/clifun": "bin/clifun",
+    "clifun": "bin/clifun"
   },
   "publishConfig": {
     "access": "public"
@@ -15,7 +15,7 @@
   },
   "keywords": [
     "cli",
-    "create-cli"
+    "clifun"
   ],
   "author": "",
   "license": "ISC",
